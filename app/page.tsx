@@ -40,13 +40,13 @@ const products: Product[] = [
     name: "Normal Katlaç",
     image: "/products/normal-katlac.jpeg",
     price: "₺100",
-    colors: ["mavi", "pembe", "sarı", "siyah"],
+    colors: ["mavi", "pembe", "sarı", "siyah", "yeşil", "turuncu"],
   },
   {
     name: "Şans Kedisi",
     image: "/products/sans-kedisi.jpeg",
     price: "₺150",
-    colors: ["beyaz", "siyah", "altın", "gümüş"],
+    colors: ["beyaz", "turuncu", "mavi", "yeşil", "pembe" ],
   },
 ];
 
