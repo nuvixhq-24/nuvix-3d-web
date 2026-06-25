@@ -22,9 +22,9 @@ const products = [
   { name: "Galatasaray Anahtarlık", image: "/products/gs-katlac.jpeg", price: "₺60" },
   { name: "Harfli Anahtarlık", image: "/products/harf.jpeg", price: "₺70" },
   { name: "Messi Anahtarlık", image: "/products/messi.jpeg", price: "₺60" },
-  { name: "Pati Anahtarlık", image: "/products/pati.jpeg", price: "₺50" },
-  { name: "Normal Katlaç", image: "/products/normal-katlac.jpeg", price: "₺100" },
-  { name: "Şans Kedisi", image: "/products/sans-kedisi.jpeg", price: "₺150" },
+  { name: "Pati Anahtarlık", image: "/products/pati.jpeg", price: "₺50", color:"mavi,pembe,turuncu,sarı"},
+  { name: "Normal Katlaç", image: "/products/normal-katlac.jpeg", price: "₺100" color:"mavi,pembe,turuncu,sarı"},
+  { name: "Şans Kedisi", image: "/products/sans-kedisi.jpeg", price: "₺150" color:"mavi,pembe,turuncu,sarı,beyaz,siyah" },
 ];
 
 const services = [
