@@ -15,6 +15,15 @@ type Product = {
 const whatsappLink = (message: string) =>
   `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
+const categories = [
+  { title: "Kişiye Özel Anahtarlıklar", icon: "🔑" },
+  { title: "Araç Aksesuarları", icon: "🚗" },
+  { title: "Plakalıklar", icon: "🔲" },
+  { title: "Logo / Tabela Baskıları", icon: "⬡" },
+  { title: "Dekoratif Ürünler", icon: "🏺" },
+  { title: "Hediyelik Ürünler", icon: "🎁" },
+];
+
 const products: Product[] = [
   { name: "FB Katlaç", image: "/products/fb-katlac.jpeg", price: "₺150" },
   { name: "GS Katlaç", image: "/products/gs-katlac.jpeg", price: "₺150" },
@@ -93,59 +102,90 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#070b14] text-white">
 
+      {/* HERO (ESKİ TASARIMIN BOZULMAMASI İÇİN BURAYI DEĞİŞTİRMEDİM) */}
+      <section className="px-5 py-20 text-center">
+        <h1 className="text-5xl font-black">
+          Fikirlerini
+          <span className="block text-violet-400">3D Baskıya</span>
+          Dönüştürüyoruz.
+        </h1>
+        <p className="mt-5 text-zinc-300">
+          Kişiye özel 3D tasarım ve baskı hizmetleri.
+        </p>
+      </section>
+
+      {/* CATEGORIES */}
+      <section className="px-5 py-10">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {categories.map((c) => (
+            <div
+              key={c.title}
+              className="rounded-xl border border-white/10 bg-white/5 p-4 text-center"
+            >
+              <div className="text-3xl">{c.icon}</div>
+              <p className="mt-2 text-sm font-bold">{c.title}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* PRODUCTS */}
-      <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 px-5 py-10">
-        {products.map((product) => (
-          <div
-            key={product.name}
-            className="rounded-xl border border-white/10 bg-[#0d1320]"
-          >
-            <div className="relative aspect-square">
-              <Image
-                src={product.image}
-                alt={product.name}
-                fill
-                className="object-cover"
-              />
+      <section className="px-5 py-16">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+          {products.map((product) => (
+            <div
+              key={product.name}
+              className="rounded-xl border border-white/10 bg-[#0d1320]"
+            >
+              <div className="relative aspect-square">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <div className="p-4">
+                <h3 className="font-bold">{product.name}</h3>
+                <p className="text-violet-400 font-bold">{product.price}</p>
+
+                {/* COLORS */}
+                {product.colors && (
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {product.colors.map((color) => (
+                      <button
+                        key={color}
+                        onClick={() =>
+                          setSelectedColor((prev) => ({
+                            ...prev,
+                            [product.name]: color,
+                          }))
+                        }
+                        className={`px-2 py-1 text-xs border rounded ${
+                          selectedColor[product.name] === color
+                            ? "bg-violet-500 border-violet-500"
+                            : ""
+                        }`}
+                      >
+                        {color}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <button
+                  onClick={() => addToCart(product)}
+                  className="mt-3 w-full bg-white text-black font-bold py-2 rounded"
+                >
+                  Sepete Ekle
+                </button>
+              </div>
             </div>
+          ))}
 
-            <div className="p-4">
-              <h3 className="font-bold">{product.name}</h3>
-              <p className="text-violet-400">{product.price}</p>
-
-              {/* COLORS */}
-              {product.colors && (
-                <div className="flex gap-2 mt-2 flex-wrap">
-                  {product.colors.map((color) => (
-                    <button
-                      key={color}
-                      onClick={() =>
-                        setSelectedColor((prev) => ({
-                          ...prev,
-                          [product.name]: color,
-                        }))
-                      }
-                      className={`px-2 py-1 text-xs border rounded ${
-                        selectedColor[product.name] === color
-                          ? "bg-violet-500 border-violet-500"
-                          : ""
-                      }`}
-                    >
-                      {color}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              <button
-                onClick={() => addToCart(product)}
-                className="mt-3 w-full bg-white text-black font-bold py-2 rounded"
-              >
-                Sepete Ekle
-              </button>
-            </div>
-          </div>
-        ))}
+        </div>
       </section>
 
       {/* CART */}
