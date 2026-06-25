@@ -6,7 +6,7 @@ import Image from "next/image";
 const whatsappNumber = "905528385822";
 
 const whatsappLink = (message: string) =>
-  https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)};
+  `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
 const categories = [
   { title: "Kişiye Özel Anahtarlıklar", icon: "🔑" },
@@ -108,7 +108,7 @@ export default function Home() {
       cart
         .map(
           (c) =>
-            - ${c.name}${c.color ? ` (${c.color}) : ""} x${c.qty}`
+            `- ${c.name}${c.color ? ` (${c.color})` : ""} x${c.qty}`
         )
         .join("\n");
 
@@ -118,7 +118,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#070b14] text-white">
 
-      {/* HEADER (AYNEN KORUNDU) */}
+      {/* HEADER */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[#070b14]/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
           <a href="#" className="text-2xl font-black tracking-[0.18em]">
@@ -142,7 +142,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* HERO (AYNEN) */}
+      {/* HERO */}
       <section className="mx-auto max-w-7xl px-5 py-20">
         <h1 className="text-5xl font-black">
           Fikirlerini <span className="text-violet-400">3D Baskıya</span>{" "}
@@ -168,7 +168,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PRODUCTS (RENK + SEPET EKLİ) */}
+      {/* PRODUCTS */}
       <section id="urunler" className="mx-auto max-w-7xl px-5 py-16">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
@@ -190,7 +190,6 @@ export default function Home() {
                 <h3 className="font-bold">{product.name}</h3>
                 <p className="text-violet-400 font-bold">{product.price}</p>
 
-                {/* RENKLER */}
                 {product.colors && (
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {product.colors.map((color) => (
@@ -235,7 +234,7 @@ export default function Home() {
           {cart.map((item, i) => (
             <div key={i} className="flex justify-between text-sm mb-1">
               <span>
-                {item.name} {item.color && (${item.color})} x{item.qty}
+                {item.name} {item.color && `(${item.color})`} x{item.qty}
               </span>
 
               <button
@@ -256,7 +255,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* SERVICES (AYNEN KORUNUR) */}
+      {/* SERVICES */}
       <section id="hizmetler" className="mx-auto max-w-7xl px-5 py-20">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
           {services.map((s) => (
