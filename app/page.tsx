@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 const whatsappNumber = "905528385822";
+const ADMIN_PASSWORD = "nuvix123";
 
 type Product = {
   name: string;
@@ -11,15 +12,6 @@ type Product = {
   price: string;
   colors?: string[];
 };
-
-const categories = [
-  { title: "Kişiye Özel Anahtarlıklar", icon: "🔑" },
-  { title: "Araç Aksesuarları", icon: "🚗" },
-  { title: "Plakalıklar", icon: "🔲" },
-  { title: "Logo / Tabela Baskıları", icon: "⬡" },
-  { title: "Dekoratif Ürünler", icon: "🏺" },
-  { title: "Hediyelik Ürünler", icon: "🎁" },
-];
 
 const products: Product[] = [
   { name: "FB Katlaç", image: "/products/fb-katlac.jpeg", price: "₺150" },
@@ -39,171 +31,217 @@ const products: Product[] = [
     price: "₺150",
     colors: ["mavi", "pembe", "sarı", "siyah"],
   },
-  {
-    name: "Şans Kedisi",
-    image: "/products/sans-kedisi.jpeg",
-    price: "₺180",
-    colors: ["beyaz", "siyah", "kırmızı", "mavi"],
-  },
 ];
 
-const services = [
-  { title: "3D Tasarım", text: "Fikirlerinizi 3D modele dönüştürüyoruz.", icon: "✏️" },
-  { title: "3D Baskı", text: "Yüksek kaliteli 3D baskı hizmeti sunuyoruz.", icon: "🖨️" },
-  { title: "Modelleme", text: "Özel ölçü ve ihtiyaca göre modelleme.", icon: "⚙️" },
-  { title: "Prototip Üretim", text: "Ürün öncesi prototip üretimi yapıyoruz.", icon: "🧩" },
-];
+const whatsappLink = (message: string) =>
+  `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState<Record<string, string>>({});
+  const [cart, setCart] = useState<
+    { name: string; color?: string; price: string; qty: number }[]
+  >([]);
 
-  const whatsappLink = (message: string) =>
-    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [adminInput, setAdminInput] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // 🛒 ADD TO CART
+  const addToCart = (product: Product) => {
+    const color = selectedColor[product.name];
+
+    setCart((prev) => {
+      const exists = prev.find(
+        (p) => p.name === product.name && p.color === color
+      );
+
+      if (exists) {
+        return prev.map((p) =>
+          p.name === product.name && p.color === color
+            ? { ...p, qty: p.qty + 1 }
+            : p
+        );
+      }
+
+      return [
+        ...prev,
+        { name: product.name, color, price: product.price, qty: 1 },
+      ];
+    });
+  };
+
+  // 🗑 REMOVE
+  const removeItem = (name: string, color?: string) => {
+    setCart((prev) =>
+      prev.filter((p) => !(p.name === name && p.color === color))
+    );
+  };
+
+  // 📦 WHATSAPP ORDER
+  const sendCart = () => {
+    const text =
+      "Merhaba Nuvix, sipariş:\n\n" +
+      cart
+        .map(
+          (c) =>
+            `- ${c.name}${c.color ? ` (${c.color})` : ""} x${c.qty}`
+        )
+        .join("\n");
+
+    window.open(whatsappLink(text), "_blank");
+  };
 
   return (
     <main className="min-h-screen bg-[#070b14] text-white">
 
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#070b14]/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-          <a href="#" className="text-2xl font-black tracking-[0.18em]">
-            NUVI<span className="text-violet-400">X</span>
-          </a>
+      <header className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+        <h1 className="text-xl font-black">NUVIX 3D</h1>
 
-          <nav className="hidden gap-7 text-sm font-medium text-zinc-300 lg:flex">
-            <a href="#urunler">Ürünler</a>
-            <a href="#hizmetler">3D Hizmetlerimiz</a>
-            <a href="#ozel-siparis">Özel Sipariş</a>
-            <a href="#iletisim">İletişim</a>
-          </nav>
-
-          <a
-            href={whatsappLink("Merhaba Nuvix, bilgi almak istiyorum.")}
-            target="_blank"
-            className="hidden rounded-xl border border-green-400/70 px-4 py-2 text-sm font-bold text-white sm:block"
-          >
-            🟢 WhatsApp
-          </a>
-
+        <div className="flex gap-3">
+          {/* CART */}
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="rounded-lg border border-white/15 px-3 py-2 text-sm lg:hidden"
+            onClick={sendCart}
+            className="bg-violet-500 px-3 py-1 rounded text-sm font-bold"
           >
-            Menü
+            Sepet ({cart.length})
+          </button>
+
+          {/* ADMIN */}
+          <button
+            onClick={() => setAdminOpen(true)}
+            className="border px-3 py-1 rounded text-sm"
+          >
+            Admin
           </button>
         </div>
-
-        {menuOpen && (
-          <div className="border-t border-white/10 px-5 py-4 lg:hidden">
-            <div className="flex flex-col gap-4 text-zinc-300">
-              <a href="#urunler">Ürünler</a>
-              <a href="#hizmetler">Hizmetler</a>
-              <a href="#ozel-siparis">Özel Sipariş</a>
-              <a href="#iletisim">İletişim</a>
-            </div>
-          </div>
-        )}
       </header>
 
-      {/* HERO */}
-      <section className="px-5 py-20 text-center">
-        <h1 className="text-5xl font-black">
-          Fikirlerini
-          <span className="block text-violet-400">3D Baskıya</span>
-          Dönüştürüyoruz.
-        </h1>
-        <p className="mt-5 text-zinc-300">
-          Kişiye özel 3D tasarım ve baskı hizmetleri.
-        </p>
-      </section>
+      {/* ADMIN MODAL */}
+      {adminOpen && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
+          <div className="bg-[#0d1320] p-6 rounded-xl w-80">
+            {!isAdmin ? (
+              <>
+                <p className="mb-3 font-bold">Admin Giriş</p>
+                <input
+                  className="w-full p-2 text-black"
+                  placeholder="Şifre"
+                  value={adminInput}
+                  onChange={(e) => setAdminInput(e.target.value)}
+                />
+                <button
+                  onClick={() =>
+                    setIsAdmin(adminInput === ADMIN_PASSWORD)
+                  }
+                  className="mt-3 w-full bg-green-500 text-black font-bold py-2"
+                >
+                  Giriş
+                </button>
+              </>
+            ) : (
+              <div>
+                <p className="font-bold mb-2">Admin Panel</p>
+                <p className="text-sm text-zinc-400">
+                  Ürün sayısı: {products.length}
+                </p>
+                <button
+                  onClick={() => {
+                    setIsAdmin(false);
+                    setAdminOpen(false);
+                  }}
+                  className="mt-3 w-full bg-red-500 py-2"
+                >
+                  Çıkış
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* PRODUCTS */}
-      <section id="urunler" className="px-5 py-16">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 px-5 py-10">
+        {products.map((product) => (
+          <div
+            key={product.name}
+            className="bg-[#0d1320] border border-white/10 rounded-xl overflow-hidden"
+          >
+            <div className="relative aspect-square">
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                className="object-cover"
+              />
+            </div>
 
-          {products.map((product) => (
-            <div
-              key={product.name}
-              className="rounded-xl border border-white/10 bg-[#0d1320]"
-            >
+            <div className="p-4">
+              <h3 className="font-bold">{product.name}</h3>
+              <p className="text-violet-400 font-bold">{product.price}</p>
 
-              <div className="relative aspect-square">
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover rounded-t-xl"
-                />
-              </div>
+              {/* COLORS */}
+              {product.colors && (
+                <div className="flex gap-2 flex-wrap mt-2">
+                  {product.colors.map((color) => (
+                    <button
+                      key={color}
+                      onClick={() =>
+                        setSelectedColor((prev) => ({
+                          ...prev,
+                          [product.name]: color,
+                        }))
+                      }
+                      className={`px-2 py-1 text-xs border rounded ${
+                        selectedColor[product.name] === color
+                          ? "bg-violet-500 border-violet-500"
+                          : ""
+                      }`}
+                    >
+                      {color}
+                    </button>
+                  ))}
+                </div>
+              )}
 
-              <div className="p-4">
+              <button
+                onClick={() => addToCart(product)}
+                className="mt-3 w-full bg-white text-black font-bold py-2 rounded"
+              >
+                Sepete Ekle
+              </button>
+            </div>
+          </div>
+        ))}
+      </section>
 
-                <h3 className="font-bold">{product.name}</h3>
-                <p className="text-violet-400 font-bold">{product.price}</p>
+      {/* CART LIST */}
+      {cart.length > 0 && (
+        <div className="fixed bottom-4 right-4 bg-[#0d1320] border border-white/10 p-4 rounded-xl w-72">
+          <p className="font-bold mb-2">Sepet</p>
 
-                {/* COLORS */}
-                {product.colors && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {product.colors.map((color) => (
-                      <button
-                        key={color}
-                        onClick={() =>
-                          setSelectedColor((prev) => ({
-                            ...prev,
-                            [product.name]: color,
-                          }))
-                        }
-                        className={`px-2 py-1 text-xs rounded border ${
-                          selectedColor[product.name] === color
-                            ? "bg-violet-500 text-white border-violet-500"
-                            : "border-white/20"
-                        }`}
-                      >
-                        {color}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                <a
-                  href={whatsappLink(
-                    `Merhaba Nuvix, ${product.name}${
-                      selectedColor[product.name]
-                        ? ` (renk: ${selectedColor[product.name]})`
-                        : ""
-                    } hakkında bilgi almak istiyorum.`
-                  )}
-                  target="_blank"
-                  className="mt-4 block text-center bg-green-500 text-black font-bold py-2 rounded-lg"
-                >
-                  WhatsApp
-                </a>
-
-              </div>
+          {cart.map((item, i) => (
+            <div key={i} className="text-sm mb-2 flex justify-between">
+              <span>
+                {item.name} {item.color && `(${item.color})`} x{item.qty}
+              </span>
+              <button
+                onClick={() => removeItem(item.name, item.color)}
+                className="text-red-400"
+              >
+                X
+              </button>
             </div>
           ))}
 
+          <button
+            onClick={sendCart}
+            className="mt-3 w-full bg-green-500 text-black font-bold py-2 rounded"
+          >
+            WhatsApp Sipariş
+          </button>
         </div>
-      </section>
-
-      {/* SERVICES */}
-      <section id="hizmetler" className="px-5 py-20">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {services.map((s) => (
-            <div key={s.title} className="rounded-xl border border-white/10 bg-white/5 p-5">
-              <div className="text-4xl">{s.icon}</div>
-              <h3 className="mt-3 font-bold">{s.title}</h3>
-              <p className="text-sm text-zinc-400">{s.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer id="iletisim" className="border-t border-white/10 py-10 text-center text-zinc-400">
-        NUVIX 3D - 0552 838 58 22
-      </footer>
+      )}
 
     </main>
   );
