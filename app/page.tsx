@@ -25,7 +25,7 @@ type Product = {
 };
 
 const products: Product[] = [
-  { name: "FB Katlaç", image: "/products/fb-katlac.jpeg", price: "₺1501" },
+  { name: "FB Katlaç", image: "/products/fb-katlac.jpeg", price: "₺150" },
   { name: "GS Katlaç", image: "/products/gs-katlac.jpeg", price: "₺150" },
   { name: "Harf", image: "/products/harf.jpeg", price: "₺100" },
   { name: "Messi", image: "/products/messi.jpeg", price: "₺200" },
