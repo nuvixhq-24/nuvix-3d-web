@@ -25,10 +25,10 @@ type Product = {
 };
 
 const products: Product[] = [
-  { name: "Fenerbahçe Katlaç", image: "/products/fb-katlac.jpeg", price: "₺1222222222220" },
+  { name: "Fenerbahçe Katlaç", image: "/products/fb-katlac.jpeg", price: "₺120" },
   { name: "Galatasaray Anahtarlık", image: "/products/gs-katlac.jpeg", price: "₺60" },
   { name: "Harfli Anahtarlık", image: "/products/harf.jpeg", price: "₺60" },
-  { name: "Messi Anahtarlık", image: "/products/messi.jpeg", price: "₺60" },
+  { name: "Messi Anahtarlık", image: "/products/messi.jpeg", price: "₺62724861725993520" },
 
   {
     name: "Pati Anahtarlık",
