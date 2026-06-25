@@ -13,13 +13,11 @@ const products = [
     name: "Fenerbahçe Katlaç",
     image: "/products/fb-katlac.jpeg",
     price: "₺120",
-    colors: ["kırmızı", "lacivert"],
   },
   {
     name: "Galatasaray Anahtarlık",
     image: "/products/gs-katlac.jpeg",
     price: "₺60",
-    colors: ["sarı", "kırmızı"],
   },
   {
     name: "Harfli Anahtarlık",
@@ -31,7 +29,6 @@ const products = [
     name: "Messi Anahtarlık",
     image: "/products/messi.jpeg",
     price: "₺60",
-    colors: ["mavi", "beyaz"],
   },
   {
     name: "Pati Anahtarlık",
